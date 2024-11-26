@@ -41,7 +41,15 @@ namespace ComputerStore.Controllers
             }
 
             await AuthenticateAsync(user);
-            return RedirectToAction("Index", "Home"); // Перенаправление на пустую страницу
+            switch (user.Role)
+            {
+                case "Seller":
+                    return RedirectToAction("Seller", "Home");
+                case "Manager":
+                    return RedirectToAction("Manager", "Home");
+                default:
+                    return RedirectToAction("Admin", "Home");
+            }
         }
 
         private async Task AuthenticateAsync(User user)
@@ -49,7 +57,8 @@ namespace ComputerStore.Controllers
             var claims = new List<Claim>
             {
                 new Claim (ClaimTypes.NameIdentifier, user. Id. ToString()),
-                new Claim (ClaimsIdentity.DefaultNameClaimType, user. Login)
+                new Claim (ClaimsIdentity.DefaultNameClaimType, user. Login),
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

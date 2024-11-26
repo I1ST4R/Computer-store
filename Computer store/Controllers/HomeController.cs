@@ -21,8 +21,20 @@ namespace ComputerStore.Controllers
             return View();
         }
 
-        [Authorize]
-        public IActionResult Privacy()
+        [Authorize(Policy = "Admin")]
+        public IActionResult Admin()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "Manager")]
+        public IActionResult Manager()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "Seller")]
+        public IActionResult Seller()
         {
             return View();
         }
