@@ -1,0 +1,58 @@
+﻿@using ComputerStore.Models.Account;
+@model LoginViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Авторизация TodoList.Mvc</title>
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ComputerStore.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid d-flex align-items-center justify-content-center flex-column" style="min-height: 100vh;">
+        <main role="main" style="width: 400px" class="mt-5">
+            <div class="card">
+                <div class="card-body ps-5 pe-4">
+                    <form asp-action="Login" asp-controller="Account" method="post">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fa-solid fa-user"></i>
+                                </span>
+                                <div class="form-floating">
+                                    <input asp-for="Login" type="text" class="form-control" placeholder="Введите логин" />
+                                    <label asp-for="Login" class="form-label">Логин</label>
+                                </div>
+                            </div>
+                            <span class="text-danger" asp-validation-for="Login"></span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fa-solid fa-lock"></i>
+                                </span>
+                                <div class="form-floating">
+                                    <input asp-for="Password" type="password" class="form-control" placeholder="Введите пароль" />
+                                    <label asp-for="Password" class="form-label">Пароль</label>
+                                </div>
+                            </div>
+                            <span class="text-danger" asp-validation-for="Password"></span>
+                        </div>
+                        <div class="text-danger mb-2">@ViewBag.Error</div>
+                        <button type="submit" class="btn btn-primary w-100">Войти</button>
+                    </form>
+                </div>
+            </div>
+            <footer class="footer text-end mt-3">
+                &copy; 2023 Список задач
+            </footer>
+        </main>
+    </div>
+</body>
+</html>
