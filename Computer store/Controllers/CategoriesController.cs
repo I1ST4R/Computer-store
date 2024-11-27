@@ -1,15 +1,23 @@
 ﻿using Computer_store.Domain.Entities;
+using ComputerStore.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class CategoriesController : Controller
 {
-    private static List<Category> _categories = new List<Category>
-    {
-    };
+    private readonly ComputerStoreContext _context;
 
-    public IActionResult Index()
+    public CategoriesController(ComputerStoreContext context)
     {
-        return View(_categories);
+        _context = context;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var categories = await _context.Categories.ToListAsync();
+        return View(categories);
     }
 
     public IActionResult Create()
@@ -23,24 +31,16 @@ public class CategoriesController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Category category)
+    public async Task<IActionResult> Create(Category category)
     {
-        if (_categories.Any())
-        {
-            category.Id = _categories.Max(p => p.Id) + 1;
-        }
-        else
-        {
-            category.Id = 1;
-        }
-
-        _categories.Add(category);
+        _context.Categories.Add(category);
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 
-    public IActionResult Edit(int id)
+    public async Task<IActionResult> Edit(int id)
     {
-        var category = _categories.FirstOrDefault(p => p.Id == id);
+        var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
             return NotFound();
@@ -49,21 +49,16 @@ public class CategoriesController : Controller
     }
 
     [HttpPost]
-    public IActionResult Edit(Category category)
+    public async Task<IActionResult> Edit(Category category)
     {
-        var existingCategory = _categories.FirstOrDefault(p => p.Id == category.Id);
-        if (existingCategory == null)
-        {
-            return NotFound();
-        }
-        existingCategory.Name = category.Name;
-        existingCategory.Description = category.Description;
+        _context.Entry(category).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var category = _categories.FirstOrDefault(p => p.Id == id);
+        var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
             return NotFound();
@@ -72,14 +67,15 @@ public class CategoriesController : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteConfirmed(int id)
+    public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var category = _categories.FirstOrDefault(p => p.Id == id);
+        var category = await _context.Categories.FindAsync(id);
         if (category == null)
         {
             return NotFound();
         }
-        _categories.Remove(category);
+        _context.Categories.Remove(category);
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 }

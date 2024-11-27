@@ -1,45 +1,39 @@
 ﻿using Computer_store.Domain.Entities;
+using ComputerStore.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 public class ProvidersController : Controller
 {
-    private static List<Provider> _providers = new List<Provider>
-    {
-    };
+    private readonly ComputerStoreContext _context;
 
-    public IActionResult Index()
+    public ProvidersController(ComputerStoreContext context)
     {
-        return View(_providers);
+        _context = context;
     }
-    public IActionResult Back()
+
+    public async Task<IActionResult> Index()
     {
-        return RedirectToAction("Index", "Home");
+        var providers = await _context.Providers.ToListAsync();
+        return View(providers);
     }
+
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
-    public IActionResult Create(Provider provider)
+    public async Task<IActionResult> Create(Provider provider)
     {
-
-        if (_providers.Any())
-        {
-            provider.Id = _providers.Max(p => p.Id) + 1;
-        }
-        else
-        {
-            provider.Id = 1;
-        }
-
-        _providers.Add(provider);
+        _context.Providers.Add(provider);
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 
-    public IActionResult Edit(int id)
+    public async Task<IActionResult> Edit(int id)
     {
-        var provider = _providers.FirstOrDefault(p => p.Id == id);
+        var provider = await _context.Providers.FindAsync(id);
         if (provider == null)
         {
             return NotFound();
@@ -48,21 +42,16 @@ public class ProvidersController : Controller
     }
 
     [HttpPost]
-    public IActionResult Edit(Provider provider)
+    public async Task<IActionResult> Edit(Provider provider)
     {
-        var existingProvider = _providers.FirstOrDefault(p => p.Id == provider.Id);
-        if (existingProvider == null)
-        {
-            return NotFound();
-        }
-        existingProvider.Name = provider.Name;
-        existingProvider.Description = provider.Description;
+        _context.Entry(provider).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var provider = _providers.FirstOrDefault(p => p.Id == id);
+        var provider = await _context.Providers.FindAsync(id);
         if (provider == null)
         {
             return NotFound();
@@ -71,14 +60,11 @@ public class ProvidersController : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteConfirmed(int id)
+    public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var provider = _providers.FirstOrDefault(p => p.Id == id);
-        if (provider == null)
-        {
-            return NotFound();
-        }
-        _providers.Remove(provider);
+        var provider = await _context.Providers.FindAsync(id);
+        _context.Providers.Remove(provider);
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 }
