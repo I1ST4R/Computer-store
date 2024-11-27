@@ -1,16 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-
-namespace ComputerStore.Models.Account
+namespace Computer_store.Models
 {
-
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Данное поле обязательно")]
-        public string Login { get; set; }
+        public string Login {  get; set; }
 
         [Required(ErrorMessage = "Данное поле обязательно")]
         public string Password { get; set; }
     }
-
 }

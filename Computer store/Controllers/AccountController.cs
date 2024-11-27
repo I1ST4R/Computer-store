@@ -1,11 +1,11 @@
 ﻿using Computer_store.Domain.Entities;
-using ComputerStore.Models.Account;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using ComputerStore.Domain;
+using Computer_store.Models;
 
 namespace ComputerStore.Controllers
 {
