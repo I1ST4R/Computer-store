@@ -10,10 +10,8 @@ namespace Computer_store.Domain.Entities
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public Provider(string name, string description)
+        public Provider()
         {
-            Name = name;
-            Description = description;
         }
     }
 }

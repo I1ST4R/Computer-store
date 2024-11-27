@@ -1,0 +1,60 @@
+﻿@using Computer_store.Domain.Entities;
+@model IEnumerable<Provider>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Providers</title>
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ComputerStore.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid d-flex align-items-center justify-content-center flex-column" style="min-height: 100vh;">
+        <main role="main" class="mt-5">
+            <div class="card">
+                <div class="card-body ps-5 pe-4">
+                    <div class="d-flex align-items-center justify-content-center" style="gap:15px">
+                        <form method="post" asp-controller="Providers" asp-action="Back">
+                            <button class="btn btn-secondary" type="submit">Back</button>
+                        </form>
+                        <h1>Providers</h1>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a asp-action="Create" style="margin-inline:auto" class="btn btn-success">Create New</a>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var provider in Model)
+                            {
+                                <tr>
+                                    <td>@provider.Id</td>
+                                    <td>@provider.Name</td>
+                                    <td>@provider.Description</td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@provider.Id" class="btn btn-sm btn-primary">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@provider.Id" class="btn btn-sm btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

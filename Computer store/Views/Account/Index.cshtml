@@ -18,6 +18,9 @@
     <div class="container-fluid d-flex align-items-center justify-content-center flex-column" style="min-height: 100vh;">
         <main role="main" style="width: 400px" class="mt-5">
             <div class="card">
+                <div class="d-flex align-items-center justify-content-center" style="gap:15px">
+                    <h1>Authorization</h1>
+                </div>
                 <div class="card-body ps-5 pe-4">
                     <form asp-action="Login" asp-controller="Account" method="post">
                         <div class="mb-3">
@@ -27,7 +30,7 @@
                                 </span>
                                 <div class="form-floating">
                                     <input asp-for="Login" type="text" class="form-control" placeholder="Введите логин" />
-                                    <label asp-for="Login" class="form-label">Логин</label>
+                                    <label asp-for="Login" class="form-label">Login</label>
                                 </div>
                             </div>
                             <span class="text-danger" asp-validation-for="Login"></span>
@@ -39,13 +42,13 @@
                                 </span>
                                 <div class="form-floating">
                                     <input asp-for="Password" type="password" class="form-control" placeholder="Введите пароль" />
-                                    <label asp-for="Password" class="form-label">Пароль</label>
+                                    <label asp-for="Password" class="form-label">Password</label>
                                 </div>
                             </div>
                             <span class="text-danger" asp-validation-for="Password"></span>
                         </div>
                         <div class="text-danger mb-2">@ViewBag.Error</div>
-                        <button type="submit" class="btn btn-primary w-100">Войти</button>
+                        <button type="submit" class="btn btn-primary w-100">Enter</button>
                     </form>
                 </div>
             </div>

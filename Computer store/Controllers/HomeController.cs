@@ -15,10 +15,16 @@ namespace ComputerStore.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Index()
         {
             return View();
+        }
+
+        [Authorize(Policy = "Seller")]
+        public IActionResult ProductsIndex()
+        {
+            return RedirectToAction("Index", "Products");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

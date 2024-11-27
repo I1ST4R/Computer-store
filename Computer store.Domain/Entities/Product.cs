@@ -14,14 +14,9 @@ namespace Computer_store.Domain.Entities
         public int ProviderId { get; set; }
         public double Price{ get; set; }
         public int Quantity { get; set; }
-        public Product(string name, string description, int categoryId, int providerId, double price, int quantity)
+        public Product()
         {
-            Name = name;
-            Description = description;
-            CategoryId = categoryId;
-            ProviderId = providerId;
-            Price = price;
-            Quantity = quantity;
+
         }
     }
 }
