@@ -1,20 +1,63 @@
-﻿@using Computer_store.Models;
-@model LoginViewModel
-@{
+﻿@{
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Авторизация</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ComputerStore.styles.css" asp-append-version="true" />
 </head>
 <body>
-    
+
+    @if (User.IsInRole("Seller"))
+    {
+        <form method="post" asp-controller="Pages" asp-action="Products">
+            <button type="submit">Products</button>
+        </form>
+        <form method="post" asp-controller="Pages" asp-action="Categories">
+            <button type="submit">Categories</button>
+        </form>
+        <form method="post" asp-controller="Pages" asp-action="Providers">
+            <button type="submit">Providers</button>
+        </form>
+    }
+
+    @if (User.IsInRole("Manager"))
+    {
+        <form method="post" asp-controller="Pages" asp-action="Products">
+            <button type="submit">Products</button>
+        </form>
+        <form method="post" asp-controller="Pages" asp-action="Sales">
+            <button type="submit">Sales</button>
+        </form>
+        <form method="post" asp-controller="Pages" asp-action="Users">
+            <button type="submit">Users</button>
+        </form>
+    }
+
+    @if (User.IsInRole("Admin"))
+    {
+        <form method="post" asp-controller="Pages" asp-action="Products">
+            <button type="submit">Products</button>
+        </form>
+        <form method="post" asp-controller="Pages" asp-action="Categories">
+            <button type="submit">Categories</button>
+        </form>
+        <form method="post" asp-controller="Pages" asp-action="Providers">
+            <button type="submit">Providers</button>
+        </form>
+        <form method="post" asp-controller="Pages" asp-action="Sales">
+            <button type="submit">Sales</button>
+        </form>
+        <form method="post" asp-controller="Pages" asp-action="Users">
+            <button type="submit">Users</button>
+        </form>
+    }
 </body>
 </html>

@@ -41,15 +41,7 @@ namespace ComputerStore.Controllers
             }
 
             await AuthenticateAsync(user);
-            switch (user.Role)
-            {
-                case "Seller":
-                    return RedirectToAction("Seller", "Home");
-                case "Manager":
-                    return RedirectToAction("Manager", "Home");
-                default:
-                    return RedirectToAction("Admin", "Home");
-            }
+            return RedirectToAction("Index", "Home");
         }
 
         private async Task AuthenticateAsync(User user)

@@ -21,24 +21,6 @@ namespace ComputerStore.Controllers
             return View();
         }
 
-        [Authorize(Policy = "Admin")]
-        public IActionResult Admin()
-        {
-            return View();
-        }
-
-        [Authorize(Policy = "Manager")]
-        public IActionResult Manager()
-        {
-            return View();
-        }
-
-        [Authorize(Policy = "Seller")]
-        public IActionResult Seller()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
