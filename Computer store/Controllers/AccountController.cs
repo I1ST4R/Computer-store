@@ -41,8 +41,7 @@ namespace ComputerStore.Controllers
             }
 
             await AuthenticateAsync(user);
-            if (user.Role == "Seller") return RedirectToAction("Index", "Products");
-            else return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         private async Task AuthenticateAsync(User user)

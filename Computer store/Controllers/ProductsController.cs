@@ -28,11 +28,6 @@ public class ProductsController : Controller
         return View();
     }
 
-    public IActionResult Back()
-    {
-        return RedirectToAction("Index", "Home");
-    }
-
     [Authorize(Roles = "Admin,Manager")]
     [HttpPost]
     public async Task<IActionResult> Create(Product product)

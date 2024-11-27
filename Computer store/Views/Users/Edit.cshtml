@@ -1,0 +1,45 @@
+﻿@using Computer_store.Domain.Entities;
+@model User
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit User</title>
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ComputerStore.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid d-flex align-items-center justify-content-center flex-column" style="min-height: 100vh;">
+        <main role="main" style="width: 400px" class="mt-5">
+            <div class="card">
+                <div class="card-body ps-5 pe-4">
+                    <h1 class="mb-4">Edit User</h1>
+                    <form asp-action="Edit">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="mb-3">
+                            <label asp-for="Login" class="form-label">Login</label>
+                            <input asp-for="Login" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <input asp-for="Password" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Role" class="form-label">Role</label>
+                            <input asp-for="Role" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Save</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+

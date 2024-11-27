@@ -1,8 +1,10 @@
 ﻿using Computer_store.Domain.Entities;
 using ComputerStore.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 public class CategoriesController : Controller
@@ -25,11 +27,6 @@ public class CategoriesController : Controller
         return View();
     }
 
-    public IActionResult Back()
-    {
-        return RedirectToAction("Index", "Home");
-    }
-
     [HttpPost]
     public async Task<IActionResult> Create(Category category)
     {
@@ -38,6 +35,7 @@ public class CategoriesController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int id)
     {
         var category = await _context.Categories.FindAsync(id);
@@ -48,6 +46,7 @@ public class CategoriesController : Controller
         return View(category);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Edit(Category category)
     {
@@ -56,6 +55,7 @@ public class CategoriesController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var category = await _context.Categories.FindAsync(id);
@@ -66,6 +66,7 @@ public class CategoriesController : Controller
         return View(category);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

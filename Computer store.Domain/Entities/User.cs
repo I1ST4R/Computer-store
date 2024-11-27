@@ -17,5 +17,10 @@ namespace Computer_store.Domain.Entities
             Password = password;
             Role = role;
         }
+
+        public User()
+        {
+            Role = "Seller";
+        }
     }
 }

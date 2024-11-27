@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Security.Claims
+@{
     Layout = null;
 }
 
@@ -19,7 +20,7 @@
             <div class="card">
                 <div class="card-body ps-5 pe-4">
                     <div class="d-flex align-items-center justify-content-center" style="gap:15px; margin-bottom:30px;">
-                        <form method="post" asp-controller="Pages" asp-action="Back">
+                        <form method="post" asp-controller="Home" asp-action="Back">
                             <button class="btn btn-secondary" type="submit">Back</button>
                         </form>
                         <h1 style="margin:0;">Work Panel</h1>
@@ -43,6 +44,15 @@
                                 <button type="submit" class="btn btn-primary btn-block">Users</button>
                             </form>
                         }
+                        @if (User.IsInRole("Seller"))
+                        {
+                            <form method="post" asp-controller="Pages" asp-action="Products" class="mb-2">
+                                <button type="submit" class="btn btn-primary btn-block">Sell products</button>
+                            </form>
+                        }
+                        <form method="get" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" class="mb-2">
+                            <button type="submit" class="btn btn-primary btn-block">Change Password</button>
+                        </form>
                     </div>
                 </div>
             </div>

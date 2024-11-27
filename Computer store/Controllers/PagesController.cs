@@ -5,7 +5,6 @@ using System.Diagnostics;
 
 namespace ComputerStore.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")]
     public class PagesController : Controller
     {
         private readonly ILogger<PagesController> _logger;
@@ -16,24 +15,33 @@ namespace ComputerStore.Controllers
         }
         public IActionResult Back()
         {
-            return RedirectToAction("Index", "Account");
+            return RedirectToAction("Index", "Home");
         }
+
         public IActionResult Products()
         {
             return RedirectToAction("Index", "Products");
         }
+
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Categories()
         {
             return RedirectToAction("Index", "Categories");
         }
+
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Providers()
         {
             return RedirectToAction("Index", "Providers");
         }
+
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Sales()
         {
             return RedirectToAction("Index", "Sales");
         }
+
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Users()
         {
             return RedirectToAction("Index", "Users");
