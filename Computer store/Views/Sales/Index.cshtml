@@ -1,5 +1,5 @@
 ﻿@using Computer_store.Domain.Entities;
-@model IEnumerable<Category>
+@model IEnumerable<Sale>
 @{
     Layout = null;
 }
@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Categories</title>
+    <title>Sales</title>
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -23,29 +23,25 @@
                         <form method="post" asp-controller="Pages" asp-action="Back">
                             <button class="btn btn-secondary" type="submit">Back</button>
                         </form>
-                        <h1>Categories</h1>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <a asp-action="Create" style="margin-inline:auto" class="btn btn-success">Create New</a>
+                        <h1>Sales</h1>
                     </div>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th></th>
+                                <th>Product name</th>
+                                <th>User name</th>
+                                <th>Amount</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var category in Model)
+                            @foreach (var sale in Model)
                             {
                                 <tr>
-                                    <td>@category.Name</td>
-                                    <td>@category.Description</td>
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-primary">Edit</a>
-                                        <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-danger">Delete</a>
-                                    </td>
+                                    <td>@sale.Product?.Name</td>
+                                    <td>@sale.User?.Login</td>
+                                    <td>@sale.Amount</td>
+                                    <td>@sale.Date</td>
                                 </tr>
                             }
                         </tbody>

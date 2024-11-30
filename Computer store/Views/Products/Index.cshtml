@@ -34,11 +34,10 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Id</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>CategoryId</th>
-                                <th>ProviderId</th>
+                                <th>Category</th>
+                                <th>Provider</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th></th>
@@ -48,15 +47,23 @@
                             @foreach (var product in Model)
                             {
                                 <tr>
-                                    <td>@product.Id</td>
                                     <td>@product.Name</td>
                                     <td>@product.Description</td>
-                                    <td>@product.CategoryId</td>
-                                    <td>@product.ProviderId</td>
+                                    <td>@product.Category?.Name</td>
+                                    <td>@product.Provider?.Name</td>
                                     <td>@product.Price</td>
                                     <td>@product.Quantity</td>
                                     <td>
-                                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-primary">Edit</a>
+                                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-primary">
+                                            @if (User.IsInRole("Seller"))
+                                            {
+                                                <p style="margin:0;">Sell</p>
+                                            }
+                                            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                                            {
+                                                <p style="margin:0;">Edit</p>
+                                            }
+                                        </a>
                                         @if (User.IsInRole("Admin"))
                                         {
                                             <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-danger">Delete</a>

@@ -8,16 +8,12 @@ namespace Computer_store.Domain.Entities
 {
     public class Sale : Entity
     {
+
         public int ProductId { get; set; }
+        public Product Product { get; set; }
         public int UserId { get; set; }
-        public int Amount { get; set; }
-        public DateOnly Date { get; set; }
-        public Sale(int productId, int userId, int amount, DateOnly date)
-        {
-            ProductId = productId;
-            UserId = userId;
-            Amount = amount;
-            Date = date;
-        }
+        public User User { get; set; }
+        public double Amount { get; set; }
+        public DateTime Date { get; set; }
     }
 }

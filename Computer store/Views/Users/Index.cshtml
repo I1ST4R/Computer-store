@@ -32,7 +32,10 @@
                         <thead>
                             <tr>
                                 <th>Login</th>
-                                <th>Password</th>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <th>Password</th>
+                                }
                                 <th>Role</th>
                                 <th></th>
                             </tr>
@@ -45,10 +48,6 @@
                                     @if (User.IsInRole("Admin"))
                                     {
                                         <td>@user.Password</td>
-                                    }
-                                    @if (User.IsInRole("Manager"))
-                                    {
-                                        <td>********</td>
                                     }
                                     <td>@user.Role</td>
                                     @if (User.IsInRole("Admin"))

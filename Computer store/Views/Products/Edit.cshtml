@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Category</title>
+    <title>Edit Product</title>
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -33,31 +33,46 @@
                                 <input asp-for="Description" class="form-control" />
                             </div>
                             <div class="mb-3">
-                                <label asp-for="CategoryId" class="form-label">Category Id</label>
-                                <input asp-for="CategoryId" class="form-control" />
+                                <label asp-for="CategoryId" class="form-label">Category</label>
+                                <select asp-for="CategoryId" class="form-control">
+                                    @foreach (var category in ViewBag.Categories)
+                                    {
+                                        <option value="@category.Id">@category.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CategoryId" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label asp-for="ProviderId" class="form-label">Provider Id</label>
-                                <input asp-for="ProviderId" class="form-control" />
+                                <label asp-for="ProviderId" class="form-label">Provider</label>
+                                <select asp-for="ProviderId" class="form-control">
+                                    @foreach (var provider in ViewBag.Providers)
+                                    {
+                                        <option value="@provider.Id">@provider.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="ProviderId" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
                                 <label asp-for="Price" class="form-label">Price</label>
                                 <input asp-for="Price" class="form-control" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
                                 <label asp-for="Quantity" class="form-label">Quantity</label>
                                 <input asp-for="Quantity" class="form-control" />
+                                <span asp-validation-for="Quantity" class="text-danger"></span>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Save</button>
                         </form>
                     }
                     @if (User.IsInRole("Seller"))
                     {
-                        <form asp-action="SellerEdit">
+                        <form asp-action="Sale" onsubmit="return validateSaleForm()">
                             <input type="hidden" asp-for="Id" />
+                            <input type="hidden" id="CurrentQuantity" value="@Model.Quantity" />
                             <div class="mb-3">
                                 <label asp-for="Quantity" class="form-label">Quantity sold</label>
-                                <input asp-for="Quantity" class="form-control" />
+                                <input asp-for="Quantity" value="0" class="form-control" />
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Save</button>
                         </form>
@@ -70,6 +85,8 @@
         function validateForm() {
             var price = document.getElementById("Price").value;
             var quantity = document.getElementById("Quantity").value;
+            console.log("Price: " + price);
+            console.log("Quantity: " + quantity);
 
             if (price < 0) {
                 alert("Price must be non-negative.");
@@ -83,7 +100,23 @@
 
             return true;
         }
+
+        function validateSaleForm() {
+            var quantitySold = document.getElementById("Quantity").value;
+            var currentQuantity = document.getElementById("CurrentQuantity").value;
+
+            if (quantitySold <= 0) {
+                alert("Quantity sold must be greater than 0.");
+                return false;
+            }
+
+            if (quantitySold > currentQuantity) {
+                alert("Quantity sold cannot be greater than the current quantity.");
+                return false;
+            }
+
+            return true;
+        }
     </script>
 </body>
 </html>
-

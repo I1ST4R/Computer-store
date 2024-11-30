@@ -32,7 +32,11 @@
                         </div>
                         <div class="mb-3">
                             <label asp-for="Role" class="form-label">Role</label>
-                            <input asp-for="Role" class="form-control" />
+                            <select asp-for="Role" class="form-control">
+                                <option value="Manager">Manager</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Seller">Seller</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Save</button>
                     </form>

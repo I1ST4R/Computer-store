@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 public class ProductsController : Controller
@@ -17,10 +18,14 @@ public class ProductsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var products = await _context.Products.ToListAsync();
+        var products = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Provider)
+            .ToListAsync();
         return View(products);
     }
 
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Categories = await _context.Categories.ToListAsync();
@@ -32,28 +37,12 @@ public class ProductsController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(Product product)
     {
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Categories = await _context.Categories.ToListAsync();
-            ViewBag.Providers = await _context.Providers.ToListAsync();
-            return View(product);
-        }
+        ViewBag.Categories = await _context.Categories.ToListAsync();
+        ViewBag.Providers = await _context.Providers.ToListAsync();
 
-        if (!await _context.Categories.AnyAsync(c => c.Id == product.CategoryId))
-        {
-            ModelState.AddModelError("CategoryId", "Invalid CategoryId.");
-            ViewBag.Categories = await _context.Categories.ToListAsync();
-            ViewBag.Providers = await _context.Providers.ToListAsync();
-            return View(product);
-        }
-
-        if (!await _context.Providers.AnyAsync(p => p.Id == product.ProviderId))
-        {
-            ModelState.AddModelError("ProviderId", "Invalid ProviderId.");
-            ViewBag.Categories = await _context.Categories.ToListAsync();
-            ViewBag.Providers = await _context.Providers.ToListAsync();
-            return View(product);
-        }
+        // Загрузка связанных сущностей
+        product.Category = await _context.Categories.FindAsync(product.CategoryId);
+        product.Provider = await _context.Providers.FindAsync(product.ProviderId);
 
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
@@ -62,7 +51,11 @@ public class ProductsController : Controller
 
     public async Task<IActionResult> Edit(int id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Provider)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
         if (product == null)
         {
             return NotFound();
@@ -72,56 +65,60 @@ public class ProductsController : Controller
         return View(product);
     }
 
+    [Authorize(Roles = "Admin,Manager")]
     [HttpPost]
     public async Task<IActionResult> Edit(Product product)
     {
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Categories = await _context.Categories.ToListAsync();
-            ViewBag.Providers = await _context.Providers.ToListAsync();
-            return View(product);
-        }
+        ViewBag.Categories = await _context.Categories.ToListAsync();
+        ViewBag.Providers = await _context.Providers.ToListAsync();
 
-        if (!await _context.Categories.AnyAsync(c => c.Id == product.CategoryId))
-        {
-            ModelState.AddModelError("CategoryId", "Invalid CategoryId.");
-            ViewBag.Categories = await _context.Categories.ToListAsync();
-            ViewBag.Providers = await _context.Providers.ToListAsync();
-            return View(product);
-        }
-
-        if (!await _context.Providers.AnyAsync(p => p.Id == product.ProviderId))
-        {
-            ModelState.AddModelError("ProviderId", "Invalid ProviderId.");
-            ViewBag.Categories = await _context.Categories.ToListAsync();
-            ViewBag.Providers = await _context.Providers.ToListAsync();
-            return View(product);
-        }
+        product.Category = await _context.Categories.FindAsync(product.CategoryId);
+        product.Provider = await _context.Providers.FindAsync(product.ProviderId);
 
         _context.Entry(product).State = EntityState.Modified;
+
         await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 
-    public async Task<IActionResult> SellerEdit(int id)
-    {
-        var product = await _context.Products.FindAsync(id);
-        if (product == null)
-        {
-            return NotFound();
-        }
-        return View(product);
-    }
-
     [HttpPost]
-    public async Task<IActionResult> SellerEdit(Product product)
+    public async Task<IActionResult> Sale(Product product)
     {
-        var existingProduct = await _context.Products.FindAsync(product.Id);
+        var existingProduct = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Provider)
+            .FirstOrDefaultAsync(p => p.Id == product.Id);
+
         if (existingProduct == null)
         {
             return NotFound();
         }
-        existingProduct.Quantity -= product.Quantity;
+        var quantity = existingProduct.Quantity - product.Quantity;
+        if (quantity >= 0 && product.Quantity >= 1)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return BadRequest("Invalid UserId");
+            }
+
+            var sale = new Sale
+            {
+                ProductId = product.Id,
+                UserId = userId,
+                Amount = product.Quantity * existingProduct.Price,
+                Date = DateTime.Now
+            };
+
+            existingProduct.Quantity = quantity;
+
+            _context.Sales.Add(sale);
+        }
+        else
+        {
+            quantity = 0;
+        }
+
         await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
@@ -129,7 +126,11 @@ public class ProductsController : Controller
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Delete(int id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Provider)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
         if (product == null)
         {
             return NotFound();
