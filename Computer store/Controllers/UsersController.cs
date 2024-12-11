@@ -27,13 +27,19 @@ public class UsersController : Controller
         return View();
     }
 
-
     [HttpPost]
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Create(User user)
     {
         if (!ModelState.IsValid)
         {
+            return View(user);
+        }
+
+        // Проверка на уникальность логина
+        if (await _context.Users.AnyAsync(u => u.Login == user.Login))
+        {
+            ModelState.AddModelError("Login", "Логин уже занят.");
             return View(user);
         }
 

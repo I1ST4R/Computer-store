@@ -15,13 +15,16 @@ public class SalesController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string userLogin)
     {
-        var sales = await _context.Sales
-            .Include(p => p.Product)
-            .Include(p => p.User)
-            .ToListAsync();
-        return View(sales);
+        var sales = _context.Sales.Include(s => s.Product).Include(s => s.User).AsQueryable();
+
+        if (!string.IsNullOrEmpty(userLogin))
+        {
+            sales = sales.Where(s => s.User.Login == userLogin);
+        }
+
+        return View(sales.ToList());
     }
 
 }
