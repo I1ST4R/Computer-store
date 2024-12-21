@@ -16,17 +16,22 @@ public class CategoriesController : Controller
         _context = context;
     }
 
+    [Authorize(Roles = "Admin,Manager")]
+    [HttpPost]
     public async Task<IActionResult> Index()
     {
         var categories = await _context.Categories.ToListAsync();
         return View(categories);
     }
 
+    [Authorize(Roles = "Admin,Manager")]
+    [HttpPost]
     public IActionResult Create()
     {
         return View();
     }
 
+    [Authorize(Roles = "Admin,Manager")]
     [HttpPost]
     public async Task<IActionResult> Create(Category category)
     {
@@ -35,7 +40,8 @@ public class CategoriesController : Controller
         return RedirectToAction("Index");
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Manager")]
+    [HttpPost]
     public async Task<IActionResult> Edit(int id)
     {
         var category = await _context.Categories.FindAsync(id);
@@ -46,7 +52,7 @@ public class CategoriesController : Controller
         return View(category);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Manager")]
     [HttpPost]
     public async Task<IActionResult> Edit(Category category)
     {
@@ -55,7 +61,8 @@ public class CategoriesController : Controller
         return RedirectToAction("Index");
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Manager")]
+    [HttpPost]
     public async Task<IActionResult> Delete(int id)
     {
         var category = await _context.Categories.FindAsync(id);
@@ -66,7 +73,7 @@ public class CategoriesController : Controller
         return View(category);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Manager")]
     [HttpPost]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

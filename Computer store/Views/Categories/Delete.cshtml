@@ -30,14 +30,22 @@
                             <dt class="col-sm-4">Description</dt>
                             <dd class="col-sm-8">@Model.Description</dd>
                         </dl>
-                        <form asp-action="DeleteConfirmed">
-                            <input type="hidden" asp-for="Id" />
-                            <button type="submit" class="btn btn-danger w-100">Delete</button>
-                        </form>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+                            <button onclick="goBack()" class="btn btn-secondary" style="width:100%;">Back</button>
+                            <form asp-action="DeleteConfirmed">
+                                <input type="hidden" asp-for="Id" />
+                                <button type="submit" class="btn btn-danger" style="width:100%;">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+    <script type="text/javascript">
+        function goBack() {
+            window.history.back()
+        }
+    </script>
 </body>
 </html>
